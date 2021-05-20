@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "DASS Assignment 1, let the hunt begin",
+  "main": "server.js",
+  "scripts": {
+    "client-install": "cd ../frontend && npm install",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "cd ../frontend && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "Kartik",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "googleapis": "^39.2.0",
+    "nodemon": "^2.0.7"
+  },
+  "devDependencies": {}
+}
