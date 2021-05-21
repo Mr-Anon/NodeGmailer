@@ -18,9 +18,9 @@ fs.readFile('./config/credentials.json', (err, content) => {
     oAuth2Client = new google.auth.OAuth2(
         client_id, client_secret, redirect_uris[0]);
     fs.readFile(TOKEN_PATH, (err, token) => {
-        if (err) return getNewToken(oAuth2Client, callback);
+        if (err) return 0;
         oAuth2Client.setCredentials(JSON.parse(token));
-        // callback(oAuth2Client);
+
     });
 
 });
@@ -37,7 +37,7 @@ router.post("/geturl", (req, res) => {
             });
             console.log('Authorize this app by visiting this url:', authUrl);
             return res.status(200).json({ authUrl: authUrl });
-            // return getNewToken(oAuth2Client, callback);
+
         }
         else {
             oAuth2Client.setCredentials(JSON.parse(token));
@@ -59,14 +59,15 @@ router.post("/sendToken", (req, res) => {
             if (err) return res.status(400).json({ error: err });
             return res.status(200).json({ Message: "Success" });
         });
-        // callback(oAuth2Client);
     }
     )
 
 })
 
+
+// api to send email and create email  
 router.post("/sendEmail", (req, res) => {
-    const to = req.body.to;
+    const to = req.body.to; 
     const from = req.body.from;
     const subject = req.body.subject;
     const message = req.body.message;
@@ -77,11 +78,10 @@ router.post("/sendEmail", (req, res) => {
         "from: ", from, "\n",
         "subject: ", subject, "\n\n",
         message
-    ].join('');
-    // var raw = makeBody('kharbanda.aryan00@gmail.com', 'kharbanda.aryan00@gmail.com', 'This is your subject', 'I got this working finally!!!');
-    var encodedMail = new Buffer(str).toString("base64").replace(/\+/g, '-').replace(/\//g, '_');
+    ].join(''); // str contains the email
+    var encodedMail = new Buffer(str).toString("base64").replace(/\+/g, '-').replace(/\//g, '_'); 
     const gmail = google.gmail({ version: 'v1', oAuth2Client });
-    gmail.users.messages.send({
+    gmail.users.messages.send({             // Try to send mail
         auth: oAuth2Client,
         userId: 'me',
         resource: {
@@ -90,11 +90,11 @@ router.post("/sendEmail", (req, res) => {
 
     }, function (err, response) {
         if(err){
-            return res.status(400).json({ error: err });
+            return res.status(400).json({ error: err }); // return error
 
         } 
         if (response){
-            return res.status(200).json({ Message: "Success" });
+            return res.status(200).json({ Message: "Success" });    // return Success
         }
         
     });
